@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   philo.c                                            :+:      :+:    :+:   */
+/*   aux.c                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: mvicente <mvicente@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/29 15:38:24 by mvicente          #+#    #+#             */
-/*   Updated: 2023/05/29 15:38:25 by mvicente         ###   ########.fr       */
+/*   Updated: 2023/06/02 16:14:46 by mvicente         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,16 +37,17 @@ int	ft_atoi(const char *nptr)
 	return (sig * number);
 }
 
-void    free_data(t_data *data, int num)
+void	free_data(t_data *data, int num)
 {
-    int i;
+	int	i;
 
-    i = 0;
-    while (i < num)
-    {
-        free(data->philos[i]);
-        i++;
-    }
-    free(data->philos);
-    free(data);
+	i = 0;
+	while (i < num)
+	{
+		free(data->philos[i]);
+		i++;
+	}
+	free(data->philos);
+	free(data->forks);
+	free(data);
 }
