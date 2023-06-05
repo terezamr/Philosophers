@@ -18,7 +18,7 @@ CFLAGS = -Wall -Wextra -Werror
 
 RM = rm -f
 
-SRC = philo.c aux.c
+SRC = philo.c sim.c aux.c
 
 OBJ = $(SRC:.c=.o)
 

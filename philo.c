@@ -11,13 +11,11 @@
 /* ************************************************************************** */
 
 #include "philo.h"
-#include <pthread.h>
 
-int	get_time(t_data *data)
+int	get_time2(t_data *data)
 {
 	struct timeval	newtime;
 	long			time;
-	long			remain;
 
 	if (gettimeofday(&newtime, NULL) != 0)
 	{
@@ -26,96 +24,93 @@ int	get_time(t_data *data)
 	}
 	time = (newtime.tv_sec - data->time.tv_sec) * 1000
 		+ (newtime.tv_usec - data->time.tv_usec) / 1000;
-	remain = data->time_to_eat - time;
-	if (remain > 0)
-	{
-		printf("is eating\n");
-		usleep(remain * 1000);
-	}
 	return (time);
+}
+
+time_t	get_time(void)
+{
+	struct timeval		time;
+
+	gettimeofday(&time, NULL);
+	return ((time.tv_sec * 1000) + (time.tv_usec / 1000));
+}
+
+void	sleep_time(int time_to_sleep)
+{
+	struct timeval	newtime;
+	long			time;
+	long			stop;
+
+	if (gettimeofday(&newtime, NULL) != 0)
+	{
+		perror("gettimeofday");
+		return ;
+	}
+	time = (newtime.tv_sec * 1000) + (newtime.tv_usec / 1000);
+	stop = time + time_to_sleep;
+	while (get_time() < stop)
+		usleep(100);
+}
+
+void	eat(t_philo *philo)
+{
+	int	f1;
+	int	f2;
+	int	i;
+
+	i = philo->id;
+	if (philo->id % 2 != 0)
+	{
+		f1 = philo->id - 1;
+		if (philo->id == philo->data->num_philo)
+			f2 = 0;
+		else
+			f2 = philo->id;
+	}
+	else
+	{
+		f2 = philo->id - 1;
+		if (philo->id == philo->data->num_philo)
+			f1 = 0;
+		else
+			f1 = philo->id;
+	}
+	pthread_mutex_lock(&philo->data->forks[f1]);
+	printf("%ld %d has taken a fork %d\n", get_time(), i, f1 + 1);
+	pthread_mutex_lock(&philo->data->forks[f2]);
+	printf("%ld %d has taken a fork %d\n", get_time(), i, f2 + 1);
+	printf("%ld %d is eating\n", get_time(), philo->id);
+	sleep_time(philo->data->time_to_eat);
+	pthread_mutex_unlock(&philo->data->forks[f1]);
+	pthread_mutex_unlock(&philo->data->forks[f2]);
+	printf("%ld %d is sleeping\n", get_time(), philo->id);
+	sleep_time(philo->data->time_to_sleep);
+}
+
+void	think(t_philo *philo)
+{
+	//int	time_to_think;
+
+	//time_to_think = philo->data->time_to_eat;
+	printf("%ld %d is thinking\n", get_time(), philo->id);
+	sleep_time(1000);
 }
 
 void	*philo(void *philo)
 {
-	void			*a;
-	int				i;
-	t_philo			*philo_cpy;
-	int				f1;
-	int				f2;
+	void	*a;
+	t_philo *philo_cp;
 
 	a = NULL;
-	philo_cpy = (t_philo *)philo;
-	i = philo_cpy->id;
-	printf("hello %d\n", i);
-	f1 = philo_cpy->id;
-	if (philo_cpy->id == (philo_cpy->data->num_philo - 1))
-		f2 = 0;
-	else
-		f2 = philo_cpy->id + 1;
-	pthread_mutex_lock(&philo_cpy->data->forks[f1]);
-	printf("%d has fork 1\n", i);
-	pthread_mutex_lock(&philo_cpy->data->forks[f2]);
-	printf("%d has fork 2\n", i);
-	get_time(philo_cpy->data);
-	pthread_mutex_unlock(&philo_cpy->data->forks[f1]);
-	pthread_mutex_unlock(&philo_cpy->data->forks[f2]);
+	philo_cp = (t_philo *)philo;
+	if (philo_cp->id % 2 != 0)
+		think(philo_cp);
+	while (1)
+	{
+		eat(philo_cp);
+		think(philo_cp);
+	}
 	return (a);
-}
-
-t_data	*init(int num_p, char **argv)
-{
-	t_data			*data;
-	int				i;
-	struct timeval	currenttime;
-
-	i = 0;
-	data = malloc(sizeof(t_data));
-	if (gettimeofday(&currenttime, NULL) == 0)
-		data->time = currenttime;
-	else
-	{
-		perror("gettimeofday");
-		return (NULL);
-	}
-	data->num_philo = num_p;
-	data->time_to_eat = ft_atoi(argv[2]);
-	data->philos = malloc(sizeof(t_philo) * num_p + 1);
-	while (i < num_p)
-	{
-		data->philos[i] = malloc(sizeof(t_philo) * 1);
-		data->philos[i]->id = i;
-		data->philos[i]->data = data;
-		i++;
-	}
-	data->philos[i] = NULL;
-	data->forks = malloc(sizeof(pthread_mutex_t) * num_p);
-	i = 0;
-	while (i < num_p)
-	{
-		pthread_mutex_init(&data->forks[i], NULL);
-		i++;
-	}
-	return (data);
-}
-
-void	destroy_sim(int num_p, pthread_t *t, pthread_mutex_t *forks)
-{
-	int	i;
-
-	i = 0;
-	while (i < num_p)
-	{
-		if (pthread_join(t[i], NULL) != 0)
-			return ;
-		printf("goodbye thread %d\n", i);
-		i++;
-	}
-	i = 0;
-	while (i < num_p)
-	{
-		pthread_mutex_destroy(&forks[i]);
-		i++;
-	}
 }
 
 int	main(int argc, char **argv)
@@ -127,7 +122,7 @@ int	main(int argc, char **argv)
 
 	i = 0;
 	(void)argc;
-	if (argc != 3)
+	if (argc != 4)
 		return (1);
 	num_p = ft_atoi(argv[1]);
 	t = malloc(sizeof(pthread_t) * num_p);
