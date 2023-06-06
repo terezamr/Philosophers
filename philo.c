@@ -6,92 +6,34 @@
 /*   By: mvicente <mvicente@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/29 15:38:24 by mvicente          #+#    #+#             */
-/*   Updated: 2023/06/02 17:05:16 by mvicente         ###   ########.fr       */
+/*   Updated: 2023/06/06 11:56:46 by mvicente         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
 
-int	get_time2(t_data *data)
+void	eat_sleep(t_philo *philo)
 {
-	struct timeval	newtime;
-	long			time;
-
-	if (gettimeofday(&newtime, NULL) != 0)
-	{
-		perror("gettimeofday");
-		return (1);
-	}
-	time = (newtime.tv_sec - data->time.tv_sec) * 1000
-		+ (newtime.tv_usec - data->time.tv_usec) / 1000;
-	return (time);
-}
-
-time_t	get_time(void)
-{
-	struct timeval		time;
-
-	gettimeofday(&time, NULL);
-	return ((time.tv_sec * 1000) + (time.tv_usec / 1000));
-}
-
-void	sleep_time(int time_to_sleep)
-{
-	struct timeval	newtime;
-	long			time;
-	long			stop;
-
-	if (gettimeofday(&newtime, NULL) != 0)
-	{
-		perror("gettimeofday");
-		return ;
-	}
-	time = (newtime.tv_sec * 1000) + (newtime.tv_usec / 1000);
-	stop = time + time_to_sleep;
-	while (get_time() < stop)
-		usleep(100);
-}
-
-void	eat(t_philo *philo)
-{
-	int	f1;
-	int	f2;
 	int	i;
+	int	*forks;
 
 	i = philo->id;
-	if (philo->id % 2 != 0)
-	{
-		f1 = philo->id - 1;
-		if (philo->id == philo->data->num_philo)
-			f2 = 0;
-		else
-			f2 = philo->id;
-	}
-	else
-	{
-		f2 = philo->id - 1;
-		if (philo->id == philo->data->num_philo)
-			f1 = 0;
-		else
-			f1 = philo->id;
-	}
-	pthread_mutex_lock(&philo->data->forks[f1]);
-	printf("%ld %d has taken a fork %d\n", get_time(), i, f1 + 1);
-	pthread_mutex_lock(&philo->data->forks[f2]);
-	printf("%ld %d has taken a fork %d\n", get_time(), i, f2 + 1);
+	forks = get_index_f(philo);
+	pthread_mutex_lock(&philo->data->forks[forks[0]]);
+	printf("%ld %d has taken a fork %d\n", get_time(), i, forks[0] + 1);
+	pthread_mutex_lock(&philo->data->forks[forks[1]]);
+	printf("%ld %d has taken a fork %d\n", get_time(), i, forks[1] + 1);
 	printf("%ld %d is eating\n", get_time(), philo->id);
 	sleep_time(philo->data->time_to_eat);
-	pthread_mutex_unlock(&philo->data->forks[f1]);
-	pthread_mutex_unlock(&philo->data->forks[f2]);
+	pthread_mutex_unlock(&philo->data->forks[forks[0]]);
+	pthread_mutex_unlock(&philo->data->forks[forks[1]]);
 	printf("%ld %d is sleeping\n", get_time(), philo->id);
 	sleep_time(philo->data->time_to_sleep);
+	free(forks);
 }
 
 void	think(t_philo *philo)
 {
-	//int	time_to_think;
-
-	//time_to_think = philo->data->time_to_eat;
 	printf("%ld %d is thinking\n", get_time(), philo->id);
 	sleep_time(1000);
 }
@@ -99,7 +41,7 @@ void	think(t_philo *philo)
 void	*philo(void *philo)
 {
 	void	*a;
-	t_philo *philo_cp;
+	t_philo	*philo_cp;
 
 	a = NULL;
 	philo_cp = (t_philo *)philo;
@@ -107,7 +49,7 @@ void	*philo(void *philo)
 		think(philo_cp);
 	while (1)
 	{
-		eat(philo_cp);
+		eat_sleep(philo_cp);
 		think(philo_cp);
 	}
 	return (a);

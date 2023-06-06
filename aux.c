@@ -6,7 +6,7 @@
 /*   By: mvicente <mvicente@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/29 15:38:24 by mvicente          #+#    #+#             */
-/*   Updated: 2023/06/02 16:14:46 by mvicente         ###   ########.fr       */
+/*   Updated: 2023/06/06 11:50:34 by mvicente         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,4 +50,28 @@ void	free_data(t_data *data, int num)
 	free(data->philos);
 	free(data->forks);
 	free(data);
+}
+
+int	*get_index_f(t_philo *philo)
+{
+	int	*forks;
+
+	forks = malloc(sizeof(int) * 2);
+	if (philo->id % 2 != 0)
+	{
+		forks[0] = philo->id - 1;
+		if (philo->id == philo->data->num_philo)
+			forks[1] = 0;
+		else
+			forks[1] = philo->id;
+	}
+	else
+	{
+		forks[1] = philo->id - 1;
+		if (philo->id == philo->data->num_philo)
+			forks[0] = 0;
+		else
+			forks[0] = philo->id;
+	}
+	return (forks);
 }

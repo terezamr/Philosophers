@@ -6,7 +6,7 @@
 /*   By: mvicente <mvicente@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/07 15:57:26 by mvicente          #+#    #+#             */
-/*   Updated: 2023/06/02 17:02:02 by mvicente         ###   ########.fr       */
+/*   Updated: 2023/06/06 11:50:59 by mvicente         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,15 +39,17 @@ typedef struct s_data
 	pthread_mutex_t	*forks;
 }	t_data;
 
-/*Aux*/
-int		ft_atoi(const char *nptr);
-void	free_data(t_data *data, int num);
-
 /*Time*/
 time_t	get_time(void);
+void	sleep_time(int time_to_sleep);
 
 /*Simulation*/
 void	destroy_sim(int num_p, pthread_t *t, pthread_mutex_t *forks);
 t_data	*init(int num_p, char **argv);
+
+/*Aux*/
+int		ft_atoi(const char *nptr);
+void	free_data(t_data *data, int num);
+int		*get_index_f(t_philo *philo);
 
 #endif
