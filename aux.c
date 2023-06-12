@@ -6,7 +6,7 @@
 /*   By: mvicente <mvicente@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/29 15:38:24 by mvicente          #+#    #+#             */
-/*   Updated: 2023/06/06 15:13:38 by mvicente         ###   ########.fr       */
+/*   Updated: 2023/06/12 11:07:09 by mvicente         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -92,4 +92,3 @@ void	print_status(t_philo *philo, int action)
 	if (action == 5)
 		printf("%ld %d has taken a fork\n", time, philo->id);
 }
-

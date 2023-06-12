@@ -6,36 +6,40 @@
 /*   By: mvicente <mvicente@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/29 15:38:24 by mvicente          #+#    #+#             */
-/*   Updated: 2023/06/06 14:47:02 by mvicente         ###   ########.fr       */
+/*   Updated: 2023/06/12 15:12:09 by mvicente         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
 
-void	destroy_sim(int num_p, pthread_t *t, pthread_mutex_t *forks)
+void	destroy_sim(t_data	*data, pthread_t *t, pthread_t p, pthread_mutex_t *forks)
 {
 	int	i;
 
 	i = 0;
-	while (i < num_p)
+	if (pthread_join(p, NULL) != 0)
+		return ;
+	while (i < data->num_philo)
 	{
 		if (pthread_join(t[i], NULL) != 0)
 			return ;
 		i++;
 	}
 	i = 0;
-	while (i < num_p)
+	pthread_mutex_destroy(&data->life);
+	while (i < data->num_philo)
 	{
 		pthread_mutex_destroy(&forks[i]);
+		pthread_mutex_destroy(&data->philos[i]->meal);
 		i++;
 	}
+	free(t);
+	free_data(data, data->num_philo);
 }
 
-int	exit_sim(int num_p, pthread_t *t, t_data *data)
+int	exit_sim(pthread_t *t, pthread_t p, t_data *data)
 {
-	destroy_sim(num_p, t, data->forks);
-	free(t);
-	free_data(data, num_p);
+	destroy_sim(data, t, p, data->forks);
 	return (EXIT_FAILURE);
 }
 
@@ -72,6 +76,7 @@ t_data	*init(int num_p, char **argv)
 	data->time_to_die = ft_atoi(argv[2]);
 	data->time_to_eat = ft_atoi(argv[3]);
 	data->time_to_sleep = ft_atoi(argv[4]);
+	data->dead = 0;
 	data = init_philos(data, num_p);
 	data->forks = malloc(sizeof(pthread_mutex_t) * num_p);
 	if (!data->forks)
@@ -80,7 +85,9 @@ t_data	*init(int num_p, char **argv)
 	while (i < num_p)
 	{
 		pthread_mutex_init(&data->forks[i], NULL);
+		pthread_mutex_init(&data->philos[i]->meal, NULL);
 		i++;
 	}
+	pthread_mutex_init(&data->life, NULL);
 	return (data);
 }

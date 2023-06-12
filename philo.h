@@ -6,7 +6,7 @@
 /*   By: mvicente <mvicente@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/07 15:57:26 by mvicente          #+#    #+#             */
-/*   Updated: 2023/06/06 15:01:36 by mvicente         ###   ########.fr       */
+/*   Updated: 2023/06/12 15:05:30 by mvicente         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,7 @@
 # include <sys/time.h>
 # include <unistd.h>
 # include <pthread.h>
+# include <stdbool.h>
 
 # define EATING 1
 # define SLEEPING 2
@@ -30,8 +31,9 @@ typedef struct s_data	t_data;
 
 typedef struct s_philo
 {
-	int		id;
-	time_t	last_meal;
+	int				id;
+	pthread_mutex_t	meal;
+	time_t			last_meal;
 	t_data	*data;
 }		t_philo;
 
@@ -44,7 +46,11 @@ typedef struct s_data
 	int				time_to_sleep;
 	t_philo			**philos;
 	pthread_mutex_t	*forks;
+	pthread_mutex_t	life;
+	int				dead;
 }	t_data;
+
+int		check_death(t_philo *philo);
 
 /*Time*/
 time_t	get_time(void);
@@ -52,8 +58,14 @@ void	sleep_time(int time_to_sleep);
 
 /*Simulation*/
 t_data	*init(int num_p, char **argv);
-void	destroy_sim(int num_p, pthread_t *t, pthread_mutex_t *forks);
-int		exit_sim(int num_p, pthread_t *t, t_data *data);
+void	destroy_sim(t_data	*data, pthread_t *t, pthread_t p, pthread_mutex_t *forks);
+int		exit_sim(pthread_t *t, pthread_t p, t_data *data);
+
+/*Routines*/
+
+void	eating(t_philo *philo);
+void	sleeping(t_philo *philo);
+void	thinking(t_philo *philo);
 
 /*Aux*/
 int		ft_atoi(const char *nptr);
