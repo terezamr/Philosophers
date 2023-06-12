@@ -6,7 +6,7 @@
 /*   By: mvicente <mvicente@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/29 15:38:24 by mvicente          #+#    #+#             */
-/*   Updated: 2023/06/12 15:09:13 by mvicente         ###   ########.fr       */
+/*   Updated: 2023/06/12 15:27:39 by mvicente         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,6 +24,8 @@ void	eating(t_philo *philo)
 		return ;
 	print_status(philo, FORK);
 	pthread_mutex_lock(&philo->data->forks[forks[1]]);
+	if (philo->data->dead == 1)
+		return ;
 	print_status(philo, FORK);
 	print_status(philo, EATING);
 	pthread_mutex_lock(&philo->meal);
@@ -44,4 +46,5 @@ void	sleeping(t_philo *philo)
 void	thinking(t_philo *philo)
 {
 	print_status(philo, THINKING);
+	sleep_time(2);
 }

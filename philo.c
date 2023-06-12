@@ -6,7 +6,7 @@
 /*   By: mvicente <mvicente@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/29 15:38:24 by mvicente          #+#    #+#             */
-/*   Updated: 2023/06/12 15:12:23 by mvicente         ###   ########.fr       */
+/*   Updated: 2023/06/12 15:26:02 by mvicente         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,12 +38,10 @@ void	*philo(void *philo)
 	if (philo_cp->id % 2 != 0)
 	{
 		thinking(philo_cp);
-		sleep_time(5);
+		sleep_time(30);
 	}
 	while (1)
 	{
-		if (philo_cp->data->dead == 1)
-			return (NULL);
 		eating(philo_cp);
 		if (philo_cp->data->dead == 1)
 			return (NULL);
