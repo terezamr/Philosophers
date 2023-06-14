@@ -48,6 +48,7 @@ typedef struct s_data
 	int				time_to_sleep;
 	int				max_meals;
 	t_philo			**philos;
+	int				*fk;
 	pthread_mutex_t	*forks;
 	pthread_mutex_t	life;
 	int				dead;

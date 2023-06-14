@@ -81,6 +81,13 @@ t_data	*init(int num_p, int meals, char **argv)
 	data->max_meals = meals;
 	data->dead = 0;
 	data->full = 0;
+	data->fk = malloc(sizeof(int) * num_p);
+	i = 0;
+	while (i < num_p)
+	{
+		data->fk[i] = 0;
+		i++;
+	}
 	data = init_philos(data, num_p);
 	data->forks = malloc(sizeof(pthread_mutex_t) * num_p);
 	if (!data->forks)

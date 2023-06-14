@@ -49,6 +49,7 @@ void	free_data(t_data *data, int num)
 	}
 	free(data->philos);
 	free(data->forks);
+	free(data->fk);
 	free(data);
 }
 

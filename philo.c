@@ -117,9 +117,7 @@ int	main(int argc, char **argv)
 	else
 		meals = -1;
 	t = malloc(sizeof(pthread_t) * ft_atoi(argv[1]));
-	//printf("check 1\n");
 	data = init(ft_atoi(argv[1]), meals, argv);
-	//printf("check 2\n");
 	if (pthread_create(&p, NULL, &police, data) != 0)
 		return (exit_sim(NULL, p, data));
 	//printf("check 3\n");

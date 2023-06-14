@@ -17,32 +17,33 @@ void	eating(t_philo *philo)
 	int	*forks;
 
 	forks = get_index_f(philo);
-	//printf("waiting for fork\n");
+	while (philo->data->fk[forks[0]] == 1)
+		if (philo->data->dead == 1)
+			return ;
 	pthread_mutex_lock(&philo->data->forks[forks[0]]);
-	if (philo->data->dead == 1)
-		return ;
+	philo->data->fk[forks[0]] = 1;
 	print_status(philo, FORK);
-	if (philo->data->dead == 1)
-		return ;
+	while (philo->data->fk[forks[1]] == 1)
+		if (philo->data->dead == 1)
+			return ;
 	pthread_mutex_lock(&philo->data->forks[forks[1]]);
+	philo->data->fk[forks[1]] = 1;
 	if (philo->data->dead == 1)
 		return ;
 	print_status(philo, FORK);
 	print_status(philo, EATING);
-	//printf("check 5\n");
 	if (philo->data->max_meals != -1)
 	{
 		pthread_mutex_lock(&philo->number);
 		philo->meal_number = philo->meal_number + 1;
-		//printf("philo %i ate %i times\n", philo->id, philo->meal_number);
 		pthread_mutex_unlock(&philo->number);
 	}
-	// if (philo->data->dead == 1)
-	// 	return ;
 	pthread_mutex_lock(&philo->meal);
 	philo->last_meal = get_time();
 	pthread_mutex_unlock(&philo->meal);
 	sleep_time(philo->data->time_to_eat);
+	philo->data->fk[forks[0]] = 0;
+	philo->data->fk[forks[1]] = 0;
 	pthread_mutex_unlock(&philo->data->forks[forks[0]]);
 	pthread_mutex_unlock(&philo->data->forks[forks[1]]);
 	free(forks);
