@@ -14,20 +14,31 @@
 
 void	eating(t_philo *philo)
 {
-	int	i;
 	int	*forks;
 
-	i = philo->id;
 	forks = get_index_f(philo);
+	//printf("waiting for fork\n");
 	pthread_mutex_lock(&philo->data->forks[forks[0]]);
 	if (philo->data->dead == 1)
 		return ;
 	print_status(philo, FORK);
+	if (philo->data->dead == 1)
+		return ;
 	pthread_mutex_lock(&philo->data->forks[forks[1]]);
 	if (philo->data->dead == 1)
 		return ;
 	print_status(philo, FORK);
 	print_status(philo, EATING);
+	//printf("check 5\n");
+	if (philo->data->max_meals != -1)
+	{
+		pthread_mutex_lock(&philo->number);
+		philo->meal_number = philo->meal_number + 1;
+		//printf("philo %i ate %i times\n", philo->id, philo->meal_number);
+		pthread_mutex_unlock(&philo->number);
+	}
+	// if (philo->data->dead == 1)
+	// 	return ;
 	pthread_mutex_lock(&philo->meal);
 	philo->last_meal = get_time();
 	pthread_mutex_unlock(&philo->meal);

@@ -34,6 +34,8 @@ typedef struct s_philo
 	int				id;
 	pthread_mutex_t	meal;
 	time_t			last_meal;
+	pthread_mutex_t	number;
+	int				meal_number;
 	t_data	*data;
 }		t_philo;
 
@@ -44,10 +46,12 @@ typedef struct s_data
 	int				time_to_die;
 	int				time_to_eat;
 	int				time_to_sleep;
+	int				max_meals;
 	t_philo			**philos;
 	pthread_mutex_t	*forks;
 	pthread_mutex_t	life;
 	int				dead;
+	int				full;
 }	t_data;
 
 int		check_death(t_philo *philo);
@@ -57,7 +61,7 @@ time_t	get_time(void);
 void	sleep_time(int time_to_sleep);
 
 /*Simulation*/
-t_data	*init(int num_p, char **argv);
+t_data	*init(int num_p, int meals, char **argv);
 void	destroy_sim(t_data	*data, pthread_t *t, pthread_t p, pthread_mutex_t *forks);
 int		exit_sim(pthread_t *t, pthread_t p, t_data *data);
 

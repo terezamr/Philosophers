@@ -28,6 +28,20 @@ int	check_death(t_philo *philo)
 	return (0);
 }
 
+int	check_max_meals(t_philo	*philo)
+{
+	pthread_mutex_lock(&philo->number);
+	if (philo->meal_number == philo->data->max_meals)
+	{
+		printf("check full philo %i\n", philo->id);
+		philo->data->full = 1;
+		pthread_mutex_unlock(&philo->number);
+		return (1);
+	}
+	pthread_mutex_unlock(&philo->number);
+	return (0);
+}
+
 void	*philo(void *philo)
 {
 	void	*a;
@@ -40,16 +54,24 @@ void	*philo(void *philo)
 		thinking(philo_cp);
 		sleep_time(30);
 	}
+	//printf("check 34\n");
 	while (1)
 	{
-		eating(philo_cp);
-		if (philo_cp->data->dead == 1)
+		if (philo_cp->data->dead == 1 || philo_cp->data->full == 1)
 			return (NULL);
+		//printf("check 4\n");
+		//printf("check 6\n");
+		eating(philo_cp);
+		if (philo_cp->data->dead == 1 || philo_cp->data->full == 1)
+		{
+			//printf("check dead\n");
+			return (NULL);
+		}
 		sleeping(philo_cp);
-		if (philo_cp->data->dead == 1)
+		if (philo_cp->data->dead == 1 || philo_cp->data->full == 1)
 			return (NULL);
 		thinking(philo_cp);
-		if (philo_cp->data->dead == 1)
+		if (philo_cp->data->dead == 1 || philo_cp->data->full == 1)
 			return (NULL);
 	}
 	return (a);
@@ -70,6 +92,9 @@ void	*police(void *data)
 		{
 			if (check_death(data_cp->philos[i]) == 1)
 				return (a);
+			if (data_cp->max_meals != -1)
+				if (check_max_meals(data_cp->philos[i]) == 1)
+					return (a);
 			i++;
 		}
 	}
@@ -81,24 +106,33 @@ int	main(int argc, char **argv)
 	pthread_t		*t;
 	pthread_t		p;
 	t_data			*data;
-	int				num_p;
+	int				meals;
 
 	i = 0;
 	(void)argc;
-	if (argc != 5)
+	if (argc != 5 && argc != 6)
 		return (1);
-	num_p = ft_atoi(argv[1]);
-	t = malloc(sizeof(pthread_t) * num_p);
-	data = init(num_p, argv);
+	if (argc == 6)
+		meals = ft_atoi(argv[5]);
+	else
+		meals = -1;
+	t = malloc(sizeof(pthread_t) * ft_atoi(argv[1]));
+	//printf("check 1\n");
+	data = init(ft_atoi(argv[1]), meals, argv);
+	//printf("check 2\n");
 	if (pthread_create(&p, NULL, &police, data) != 0)
 		return (exit_sim(NULL, p, data));
-	while (i < num_p)
+	//printf("check 3\n");
+	while (i < ft_atoi(argv[1]))
 	{
 		if (pthread_create(&t[i], NULL, &philo, data->philos[i]) != 0)
 			return (exit_sim(t, p, data));
 		i++;
 	}
+	//printf("check 4\n");
 	i = 0;
+	//printf("before destroy\n");
 	destroy_sim(data, t, p, data->forks);
+	//printf("after destroy\n");
 	return (EXIT_SUCCESS);
 }
