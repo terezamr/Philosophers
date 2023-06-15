@@ -6,31 +6,42 @@
 /*   By: mvicente <mvicente@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/29 15:38:24 by mvicente          #+#    #+#             */
-/*   Updated: 2023/06/12 15:27:39 by mvicente         ###   ########.fr       */
+/*   Updated: 2023/06/15 11:52:10 by mvicente         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
+
+int	lock_fork(t_philo *philo, int fork)
+{
+	while (philo->data->fk[fork] == 1)
+		if (philo->data->dead == 1)
+			return (1);
+	pthread_mutex_lock(&philo->data->forks[fork]);
+	philo->data->fk[fork] = 1;
+	print_status(philo, FORK);
+	return (0);
+}
+
+void	unlock_fork(t_philo *philo, int *forks)
+{
+	philo->data->fk[forks[0]] = 0;
+	philo->data->fk[forks[1]] = 0;
+	pthread_mutex_unlock(&philo->data->forks[forks[0]]);
+	pthread_mutex_unlock(&philo->data->forks[forks[1]]);
+}
 
 void	eating(t_philo *philo)
 {
 	int	*forks;
 
 	forks = get_index_f(philo);
-	while (philo->data->fk[forks[0]] == 1)
-		if (philo->data->dead == 1)
-			return ;
-	pthread_mutex_lock(&philo->data->forks[forks[0]]);
-	philo->data->fk[forks[0]] = 1;
-	print_status(philo, FORK);
-	while (philo->data->fk[forks[1]] == 1)
-		if (philo->data->dead == 1)
-			return ;
-	pthread_mutex_lock(&philo->data->forks[forks[1]]);
-	philo->data->fk[forks[1]] = 1;
+	if (lock_fork(philo, forks[0]) == 1)
+		return ;
+	if (lock_fork(philo, forks[1]) == 1)
+		return ;
 	if (philo->data->dead == 1)
 		return ;
-	print_status(philo, FORK);
 	print_status(philo, EATING);
 	if (philo->data->max_meals != -1)
 	{
@@ -42,10 +53,7 @@ void	eating(t_philo *philo)
 	philo->last_meal = get_time();
 	pthread_mutex_unlock(&philo->meal);
 	sleep_time(philo->data->time_to_eat);
-	philo->data->fk[forks[0]] = 0;
-	philo->data->fk[forks[1]] = 0;
-	pthread_mutex_unlock(&philo->data->forks[forks[0]]);
-	pthread_mutex_unlock(&philo->data->forks[forks[1]]);
+	unlock_fork(philo, forks);
 	free(forks);
 }
 

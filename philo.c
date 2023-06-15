@@ -6,7 +6,7 @@
 /*   By: mvicente <mvicente@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/29 15:38:24 by mvicente          #+#    #+#             */
-/*   Updated: 2023/06/12 15:26:02 by mvicente         ###   ########.fr       */
+/*   Updated: 2023/06/15 11:41:24 by mvicente         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,6 @@ int	check_max_meals(t_philo	*philo)
 	pthread_mutex_lock(&philo->number);
 	if (philo->meal_number == philo->data->max_meals)
 	{
-		printf("check full philo %i\n", philo->id);
 		philo->data->full = 1;
 		pthread_mutex_unlock(&philo->number);
 		return (1);
@@ -54,19 +53,13 @@ void	*philo(void *philo)
 		thinking(philo_cp);
 		sleep_time(30);
 	}
-	//printf("check 34\n");
 	while (1)
 	{
 		if (philo_cp->data->dead == 1 || philo_cp->data->full == 1)
 			return (NULL);
-		//printf("check 4\n");
-		//printf("check 6\n");
 		eating(philo_cp);
 		if (philo_cp->data->dead == 1 || philo_cp->data->full == 1)
-		{
-			//printf("check dead\n");
 			return (NULL);
-		}
 		sleeping(philo_cp);
 		if (philo_cp->data->dead == 1 || philo_cp->data->full == 1)
 			return (NULL);
@@ -109,28 +102,21 @@ int	main(int argc, char **argv)
 	int				meals;
 
 	i = 0;
-	(void)argc;
-	if (argc != 5 && argc != 6)
-		return (1);
-	if (argc == 6)
-		meals = ft_atoi(argv[5]);
-	else
-		meals = -1;
+	meals = validator(argc, argv);
+	if (meals == EXIT_FAILURE)
+		return (EXIT_FAILURE);
 	t = malloc(sizeof(pthread_t) * ft_atoi(argv[1]));
 	data = init(ft_atoi(argv[1]), meals, argv);
 	if (pthread_create(&p, NULL, &police, data) != 0)
 		return (exit_sim(NULL, p, data));
-	//printf("check 3\n");
 	while (i < ft_atoi(argv[1]))
 	{
 		if (pthread_create(&t[i], NULL, &philo, data->philos[i]) != 0)
 			return (exit_sim(t, p, data));
 		i++;
 	}
-	//printf("check 4\n");
-	i = 0;
-	//printf("before destroy\n");
-	destroy_sim(data, t, p, data->forks);
-	//printf("after destroy\n");
+	if (pthread_join(p, NULL) != 0)
+		return (EXIT_FAILURE);
+	destroy_sim(data, t, data->forks);
 	return (EXIT_SUCCESS);
 }

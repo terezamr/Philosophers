@@ -6,7 +6,7 @@
 /*   By: mvicente <mvicente@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/07 15:57:26 by mvicente          #+#    #+#             */
-/*   Updated: 2023/06/12 15:05:30 by mvicente         ###   ########.fr       */
+/*   Updated: 2023/06/15 11:43:13 by mvicente         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,7 +36,7 @@ typedef struct s_philo
 	time_t			last_meal;
 	pthread_mutex_t	number;
 	int				meal_number;
-	t_data	*data;
+	t_data			*data;
 }		t_philo;
 
 typedef struct s_data
@@ -57,25 +57,29 @@ typedef struct s_data
 
 int		check_death(t_philo *philo);
 
-/*Time*/
-time_t	get_time(void);
-void	sleep_time(int time_to_sleep);
-
 /*Simulation*/
-t_data	*init(int num_p, int meals, char **argv);
-void	destroy_sim(t_data	*data, pthread_t *t, pthread_t p, pthread_mutex_t *forks);
+void	destroy_sim(t_data	*dt, pthread_t *t, pthread_mutex_t *fk);
 int		exit_sim(pthread_t *t, pthread_t p, t_data *data);
+t_data	*init(int num_p, int meals, char **argv);
+
+/*Mutexes*/
+void	destroy_mutexes(t_data *data, pthread_mutex_t *forks);
+void	init_mutexes(t_data *data);
 
 /*Routines*/
-
 void	eating(t_philo *philo);
 void	sleeping(t_philo *philo);
 void	thinking(t_philo *philo);
+
+/*Time*/
+time_t	get_time(void);
+void	sleep_time(int time_to_sleep);
 
 /*Aux*/
 int		ft_atoi(const char *nptr);
 void	free_data(t_data *data, int num);
 int		*get_index_f(t_philo *philo);
 void	print_status(t_philo *philo, int action);
+int		validator(int argc, char **argv);
 
 #endif
