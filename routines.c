@@ -6,7 +6,7 @@
 /*   By: mvicente <mvicente@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/29 15:38:24 by mvicente          #+#    #+#             */
-/*   Updated: 2023/06/15 11:52:10 by mvicente         ###   ########.fr       */
+/*   Updated: 2023/06/15 12:10:27 by mvicente         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,7 +42,9 @@ void	eating(t_philo *philo)
 		return ;
 	if (philo->data->dead == 1)
 		return ;
+	pthread_mutex_lock(&philo->meal);
 	print_status(philo, EATING);
+	pthread_mutex_unlock(&philo->meal);
 	if (philo->data->max_meals != -1)
 	{
 		pthread_mutex_lock(&philo->number);

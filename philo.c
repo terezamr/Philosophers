@@ -6,7 +6,7 @@
 /*   By: mvicente <mvicente@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/29 15:38:24 by mvicente          #+#    #+#             */
-/*   Updated: 2023/06/15 11:41:24 by mvicente         ###   ########.fr       */
+/*   Updated: 2023/06/15 12:28:39 by mvicente         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,6 @@ int	check_max_meals(t_philo	*philo)
 	pthread_mutex_lock(&philo->number);
 	if (philo->meal_number == philo->data->max_meals)
 	{
-		philo->data->full = 1;
 		pthread_mutex_unlock(&philo->number);
 		return (1);
 	}
@@ -70,6 +69,29 @@ void	*philo(void *philo)
 	return (a);
 }
 
+int	check_all_max_meals(t_data *data)
+{
+	int	i;
+	int	full;
+
+	i = 0;
+	full = 0;
+	while (i < data->num_philo)
+	{
+		if (check_max_meals(data->philos[i]) == 1)
+			full = full + 1;
+		else
+			return (1);
+		i++;
+	}
+	if (full == data->num_philo)
+	{
+		data->full = 1;
+		return (0);
+	}
+	return (1);
+}
+
 void	*police(void *data)
 {
 	int		i;
@@ -81,13 +103,12 @@ void	*police(void *data)
 	while (1)
 	{
 		i = 0;
+		if (check_all_max_meals(data_cp) == 0)
+			return (a);
 		while (i < data_cp->num_philo)
 		{
 			if (check_death(data_cp->philos[i]) == 1)
 				return (a);
-			if (data_cp->max_meals != -1)
-				if (check_max_meals(data_cp->philos[i]) == 1)
-					return (a);
 			i++;
 		}
 	}
