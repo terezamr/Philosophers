@@ -6,7 +6,7 @@
 /*   By: mvicente <mvicente@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/07 15:57:26 by mvicente          #+#    #+#             */
-/*   Updated: 2023/06/15 11:58:14 by mvicente         ###   ########.fr       */
+/*   Updated: 2023/06/15 14:45:57 by mvicente         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,8 +54,6 @@ typedef struct s_data
 	int				full;
 }	t_data;
 
-int		check_death(t_philo *philo);
-
 /*Simulation*/
 void	destroy_sim(t_data	*dt, pthread_t *t, pthread_mutex_t *fk);
 int		exit_sim(pthread_t *t, pthread_t p, t_data *data);
@@ -73,6 +71,8 @@ void	thinking(t_philo *philo);
 /*Time*/
 time_t	get_time(void);
 void	sleep_time(int time_to_sleep);
+int		check_death(t_philo *philo);
+int		check_all_max_meals(t_data *data);
 
 /*Aux*/
 int		ft_atoi(const char *nptr);

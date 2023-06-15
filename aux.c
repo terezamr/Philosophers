@@ -6,7 +6,7 @@
 /*   By: mvicente <mvicente@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/29 15:38:24 by mvicente          #+#    #+#             */
-/*   Updated: 2023/06/15 11:41:27 by mvicente         ###   ########.fr       */
+/*   Updated: 2023/06/15 15:39:31 by mvicente         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,13 +44,18 @@ void	free_data(t_data *data, int num)
 	i = 0;
 	while (i < num)
 	{
-		free(data->philos[i]);
+		if (data->philos[i])
+			free(data->philos[i]);
 		i++;
 	}
-	free(data->philos);
-	free(data->forks);
-	free(data->fk);
-	free(data);
+	if (data->philos)
+		free(data->philos);
+	if (data->forks)
+		free(data->forks);
+	if (data->fk)
+		free(data->fk);
+	if (data)
+		free(data);
 }
 
 int	*get_index_f(t_philo *philo)

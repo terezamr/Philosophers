@@ -6,7 +6,7 @@
 /*   By: mvicente <mvicente@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/29 15:38:24 by mvicente          #+#    #+#             */
-/*   Updated: 2023/06/15 11:27:21 by mvicente         ###   ########.fr       */
+/*   Updated: 2023/06/15 15:42:34 by mvicente         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,6 +47,8 @@ t_data	*init_philos(t_data *data, int num_p)
 	while (i < num_p)
 	{
 		data->philos[i] = malloc(sizeof(t_philo) * 1);
+		if (!data->philos[i])
+			return (NULL);
 		data->philos[i]->id = i + 1;
 		data->philos[i]->data = data;
 		data->philos[i]->last_meal = data->start_time;
@@ -62,6 +64,8 @@ t_data	*init(int num_p, int meals, char **argv)
 {
 	t_data			*data;
 
+	if (meals == EXIT_FAILURE)
+		return (NULL);
 	data = malloc(sizeof(t_data));
 	if (!data)
 		return (NULL);
@@ -78,7 +82,7 @@ t_data	*init(int num_p, int meals, char **argv)
 		return (NULL);
 	data = init_philos(data, num_p);
 	data->forks = malloc(sizeof(pthread_mutex_t) * num_p);
-	if (!data->forks)
+	if (!data->forks || !data)
 		return (NULL);
 	init_mutexes(data);
 	return (data);

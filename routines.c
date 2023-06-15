@@ -6,19 +6,24 @@
 /*   By: mvicente <mvicente@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/29 15:38:24 by mvicente          #+#    #+#             */
-/*   Updated: 2023/06/15 12:10:27 by mvicente         ###   ########.fr       */
+/*   Updated: 2023/06/15 15:32:30 by mvicente         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
 
-int	lock_fork(t_philo *philo, int fork)
+int	lock_fork(t_philo *philo, int *forks, int index)
 {
-	while (philo->data->fk[fork] == 1)
+	while (philo->data->fk[forks[index]] == 1)
+	{
 		if (philo->data->dead == 1)
+		{
+			free(forks);
 			return (1);
-	pthread_mutex_lock(&philo->data->forks[fork]);
-	philo->data->fk[fork] = 1;
+		}
+	}
+	pthread_mutex_lock(&philo->data->forks[index]);
+	philo->data->fk[forks[index]] = 1;
 	print_status(philo, FORK);
 	return (0);
 }
@@ -36,11 +41,9 @@ void	eating(t_philo *philo)
 	int	*forks;
 
 	forks = get_index_f(philo);
-	if (lock_fork(philo, forks[0]) == 1)
+	if (lock_fork(philo, forks, 0) == 1)
 		return ;
-	if (lock_fork(philo, forks[1]) == 1)
-		return ;
-	if (philo->data->dead == 1)
+	if (lock_fork(philo, forks, 1) == 1)
 		return ;
 	pthread_mutex_lock(&philo->meal);
 	print_status(philo, EATING);
