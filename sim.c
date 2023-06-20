@@ -6,7 +6,7 @@
 /*   By: mvicente <mvicente@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/29 15:38:24 by mvicente          #+#    #+#             */
-/*   Updated: 2023/06/15 15:42:34 by mvicente         ###   ########.fr       */
+/*   Updated: 2023/06/20 12:36:08 by mvicente         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,11 +60,30 @@ t_data	*init_philos(t_data *data, int num_p)
 	return (data);
 }
 
-t_data	*init(int num_p, int meals, char **argv)
+int	validator(int argc, char **argv)
+{
+	int	meals;
+
+	if (argc != 5 && argc != 6)
+		return (-2);
+	if (check_numbers(argv) == EXIT_FAILURE)
+		return (-2);
+	if (argc == 6)
+	{
+		meals = ft_atoi(argv[5]);
+		if (meals <= 0)
+			return (-2);
+	}
+	else
+		meals = -1;
+	return (meals);
+}
+
+t_data	*init(int num_p, int argc, char **argv)
 {
 	t_data			*data;
 
-	if (meals == EXIT_FAILURE)
+	if (validator(argc, argv) == -2)
 		return (NULL);
 	data = malloc(sizeof(t_data));
 	if (!data)
@@ -74,7 +93,7 @@ t_data	*init(int num_p, int meals, char **argv)
 	data->time_to_die = ft_atoi(argv[2]);
 	data->time_to_eat = ft_atoi(argv[3]);
 	data->time_to_sleep = ft_atoi(argv[4]);
-	data->max_meals = meals;
+	data->max_meals = validator(argc, argv);
 	data->dead = 0;
 	data->full = 0;
 	data->fk = malloc(sizeof(int) * num_p);

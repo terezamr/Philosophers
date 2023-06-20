@@ -6,7 +6,7 @@
 /*   By: mvicente <mvicente@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/29 15:38:24 by mvicente          #+#    #+#             */
-/*   Updated: 2023/06/15 15:44:15 by mvicente         ###   ########.fr       */
+/*   Updated: 2023/06/20 12:13:29 by mvicente         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -101,19 +101,24 @@ void	print_status(t_philo *philo, int action)
 		printf("%ld %d has taken a fork\n", time, philo->id);
 }
 
-int	validator(int argc, char **argv)
+int	check_numbers(char **argv)
 {
-	int	meals;
+	int	i;
+	int	f;
 
-	if (argc != 5 && argc != 6)
-		return (EXIT_FAILURE);
-	if (argc == 6)
+	i = 1;
+	while (argv[i])
 	{
-		meals = ft_atoi(argv[5]);
-		if (meals <= 0)
+		if (ft_atoi(argv[i]) < 0)
 			return (EXIT_FAILURE);
+		f = 0;
+		while (argv[i][f])
+		{
+			if (argv[i][f] < 48 || argv[i][f] > 57)
+				return (EXIT_FAILURE);
+			f++;
+		}
+		i++;
 	}
-	else
-		meals = -1;
-	return (meals);
+	return (0);
 }

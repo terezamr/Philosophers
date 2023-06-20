@@ -6,7 +6,7 @@
 /*   By: mvicente <mvicente@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/29 15:38:24 by mvicente          #+#    #+#             */
-/*   Updated: 2023/06/15 15:51:13 by mvicente         ###   ########.fr       */
+/*   Updated: 2023/06/20 12:37:13 by mvicente         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,13 +69,13 @@ int	main(int argc, char **argv)
 	pthread_t		*t;
 	pthread_t		p;
 	t_data			*data;
-	int				meals;
 
 	i = 0;
-	meals = validator(argc, argv);
+	data = init(ft_atoi(argv[1]), argc, argv);
+	if (!data)
+		return (EXIT_FAILURE);
 	t = malloc(sizeof(pthread_t) * ft_atoi(argv[1]));
-	data = init(ft_atoi(argv[1]), meals, argv);
-	if (!data || !t)
+	if (!t)
 		return (EXIT_FAILURE);
 	if (pthread_create(&p, NULL, &police, data) != 0)
 		return (exit_sim(NULL, p, data));
