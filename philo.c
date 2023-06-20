@@ -6,7 +6,7 @@
 /*   By: mvicente <mvicente@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/29 15:38:24 by mvicente          #+#    #+#             */
-/*   Updated: 2023/06/15 15:42:47 by mvicente         ###   ########.fr       */
+/*   Updated: 2023/06/15 15:51:13 by mvicente         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -86,7 +86,7 @@ int	main(int argc, char **argv)
 		i++;
 	}
 	if (pthread_join(p, NULL) != 0)
-		return (EXIT_FAILURE);
+		return (exit_sim(t, p, data));
 	destroy_sim(data, t, data->forks);
 	return (EXIT_SUCCESS);
 }

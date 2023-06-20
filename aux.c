@@ -6,7 +6,7 @@
 /*   By: mvicente <mvicente@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/29 15:38:24 by mvicente          #+#    #+#             */
-/*   Updated: 2023/06/15 15:39:31 by mvicente         ###   ########.fr       */
+/*   Updated: 2023/06/15 15:44:15 by mvicente         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,6 +63,8 @@ int	*get_index_f(t_philo *philo)
 	int	*forks;
 
 	forks = malloc(sizeof(int) * 2);
+	if (!forks)
+		return (NULL);
 	if (philo->id % 2 != 0)
 	{
 		forks[0] = philo->id - 1;
