@@ -6,7 +6,7 @@
 /*   By: mvicente <mvicente@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/07 15:57:26 by mvicente          #+#    #+#             */
-/*   Updated: 2023/06/21 09:30:23 by mvicente         ###   ########.fr       */
+/*   Updated: 2023/06/21 11:27:14 by mvicente         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,7 +51,7 @@ typedef struct s_data
 	pthread_mutex_t	*forks;
 	pthread_mutex_t	life;
 	pthread_mutex_t	printing;
-	pthread_mutex_t	searching;
+	pthread_mutex_t	*searching;
 	int				dead;
 	int				full;
 }	t_data;
@@ -67,15 +67,19 @@ void	destroy_mutexes(t_data *data, pthread_mutex_t *forks);
 void	init_mutexes(t_data *data);
 
 /*Routines*/
-void	eating(t_philo *philo);
-void	sleeping(t_philo *philo);
-void	thinking(t_philo *philo);
+int		eating(t_philo *philo);
+int		sleeping(t_philo *philo);
+int		thinking(t_philo *philo);
 
 /*Time*/
 time_t	get_time(void);
 void	sleep_time(int time_to_sleep);
+
+/*Conditions*/
 int		check_death(t_philo *philo);
+int		check_max_meals(t_philo	*philo);
 int		check_all_max_meals(t_data *data);
+int		check_condition(t_philo *philo);
 
 /*Aux*/
 int		ft_atoi(const char *nptr);
