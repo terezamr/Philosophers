@@ -6,7 +6,7 @@
 /*   By: mvicente <mvicente@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/29 15:38:24 by mvicente          #+#    #+#             */
-/*   Updated: 2023/06/20 12:37:13 by mvicente         ###   ########.fr       */
+/*   Updated: 2023/06/21 09:24:26 by mvicente         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,17 +26,30 @@ void	*philo(void *philo)
 	}
 	while (1)
 	{
-		if (philo_cp->data->dead == 1 || philo_cp->data->full == 1)
-			return (NULL);
 		eating(philo_cp);
+		pthread_mutex_lock(&philo_cp->data->life);
 		if (philo_cp->data->dead == 1 || philo_cp->data->full == 1)
+		{
+			pthread_mutex_unlock(&philo_cp->data->life);
 			return (NULL);
+		}
+		pthread_mutex_unlock(&philo_cp->data->life);
 		sleeping(philo_cp);
+		pthread_mutex_lock(&philo_cp->data->life);
 		if (philo_cp->data->dead == 1 || philo_cp->data->full == 1)
+		{
+			pthread_mutex_unlock(&philo_cp->data->life);
 			return (NULL);
+		}
+		pthread_mutex_unlock(&philo_cp->data->life);
 		thinking(philo_cp);
+		pthread_mutex_lock(&philo_cp->data->life);
 		if (philo_cp->data->dead == 1 || philo_cp->data->full == 1)
+		{
+			pthread_mutex_unlock(&philo_cp->data->life);
 			return (NULL);
+		}
+		pthread_mutex_unlock(&philo_cp->data->life);
 	}
 	return (a);
 }

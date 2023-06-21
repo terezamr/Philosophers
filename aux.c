@@ -6,7 +6,7 @@
 /*   By: mvicente <mvicente@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/29 15:38:24 by mvicente          #+#    #+#             */
-/*   Updated: 2023/06/20 12:13:29 by mvicente         ###   ########.fr       */
+/*   Updated: 2023/06/21 08:56:45 by mvicente         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -88,17 +88,19 @@ void	print_status(t_philo *philo, int action)
 {
 	time_t	time;
 
+	pthread_mutex_lock(&philo->data->printing);
 	time = get_time() - philo->data->start_time;
 	if (action == 1)
 		printf("%ld %d is eating\n", time, philo->id);
-	if (action == 2)
+	else if (action == 2)
 		printf("%ld %d is sleeping\n", time, philo->id);
-	if (action == 3)
+	else if (action == 3)
 		printf("%ld %d is thinking\n", time, philo->id);
-	if (action == 4)
+	else if (action == 4)
 		printf("%ld %d died\n", time, philo->id);
-	if (action == 5)
+	else if (action == 5)
 		printf("%ld %d has taken a fork\n", time, philo->id);
+	pthread_mutex_unlock(&philo->data->printing);
 }
 
 int	check_numbers(char **argv)

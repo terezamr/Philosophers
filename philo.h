@@ -6,7 +6,7 @@
 /*   By: mvicente <mvicente@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/07 15:57:26 by mvicente          #+#    #+#             */
-/*   Updated: 2023/06/20 12:36:17 by mvicente         ###   ########.fr       */
+/*   Updated: 2023/06/21 09:30:23 by mvicente         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,6 +50,8 @@ typedef struct s_data
 	int				*fk;
 	pthread_mutex_t	*forks;
 	pthread_mutex_t	life;
+	pthread_mutex_t	printing;
+	pthread_mutex_t	searching;
 	int				dead;
 	int				full;
 }	t_data;

@@ -6,7 +6,7 @@
 /*   By: mvicente <mvicente@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/29 15:38:24 by mvicente          #+#    #+#             */
-/*   Updated: 2023/06/20 11:44:27 by mvicente         ###   ########.fr       */
+/*   Updated: 2023/06/21 09:35:49 by mvicente         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,11 +16,13 @@ int	lock_fork(t_philo *philo, int *forks, int index)
 {
 	while (philo->data->fk[forks[index]] == 1)
 	{
+		pthread_mutex_lock(&philo->data->life);
 		if (philo->data->dead == 1)
 		{
-			free(forks);
+			pthread_mutex_unlock(&philo->data->life);
 			return (1);
 		}
+		pthread_mutex_unlock(&philo->data->life);
 	}
 	pthread_mutex_lock(&philo->data->forks[forks[index]]);
 	philo->data->fk[forks[index]] = 1;
