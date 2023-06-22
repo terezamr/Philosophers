@@ -6,47 +6,44 @@
 /*   By: mvicente <mvicente@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/29 15:38:24 by mvicente          #+#    #+#             */
-/*   Updated: 2023/06/22 14:05:49 by mvicente         ###   ########.fr       */
+/*   Updated: 2023/06/22 14:21:00 by mvicente         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
 
-void	philo_one(t_philo *philo)
+void	*routines_loop(t_philo *philo)
 {
-	print_status(philo, FORK);
-	sleep_time(philo->data->time_to_die);
+	while (1)
+	{
+		if (check_condition(philo) == 1)
+			return (NULL);
+		if (eating(philo) == 1)
+			continue ;
+		if (sleeping(philo) == 1)
+			return (NULL);
+		if (thinking(philo) == 1)
+			return (NULL);
+	}
 }
 
 void	*philo(void *philo)
 {
-	void	*a;
 	t_philo	*philo_cp;
 
-	a = NULL;
 	philo_cp = (t_philo *)philo;
 	if (philo_cp->data->num_philo == 1)
 	{
-		philo_one(philo);
-		return (a);
+		print_status(philo, FORK);
+		sleep_time(philo_cp->data->time_to_die);
+		return (NULL);
 	}
 	if (philo_cp->id % 2 != 0)
 	{
 		thinking(philo_cp);
 		sleep_time(30);
 	}
-	while (1)
-	{
-		if (check_condition(philo) == 1)
-			return (NULL);
-		if (eating(philo_cp) == 1)
-			continue ;
-		if (sleeping(philo_cp) == 1)
-			return (NULL);
-		if (thinking(philo_cp) == 1)
-			return (NULL);
-	}
-	return (a);
+	return (routines_loop(philo_cp));
 }
 
 void	*police(void *data)

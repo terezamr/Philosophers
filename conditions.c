@@ -6,7 +6,7 @@
 /*   By: mvicente <mvicente@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/29 15:38:24 by mvicente          #+#    #+#             */
-/*   Updated: 2023/06/21 09:47:51 by mvicente         ###   ########.fr       */
+/*   Updated: 2023/06/22 14:21:49 by mvicente         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,4 +75,23 @@ int	check_condition(t_philo *philo)
 	}
 	pthread_mutex_unlock(&philo->data->life);
 	return (0);
+}
+
+int	validator(int argc, char **argv)
+{
+	int	meals;
+
+	if (argc != 5 && argc != 6)
+		return (-2);
+	if (check_numbers(argv) == EXIT_FAILURE)
+		return (-2);
+	if (argc == 6)
+	{
+		meals = ft_atoi(argv[5]);
+		if (meals <= 0)
+			return (-2);
+	}
+	else
+		meals = -1;
+	return (meals);
 }

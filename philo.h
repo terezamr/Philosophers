@@ -6,7 +6,7 @@
 /*   By: mvicente <mvicente@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/07 15:57:26 by mvicente          #+#    #+#             */
-/*   Updated: 2023/06/21 11:27:14 by mvicente         ###   ########.fr       */
+/*   Updated: 2023/06/22 14:24:37 by mvicente         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,12 +59,12 @@ typedef struct s_data
 /*Simulation*/
 void	destroy_sim(t_data	*dt, pthread_t *t, pthread_mutex_t *fk);
 int		exit_sim(pthread_t *t, pthread_t p, t_data *data);
-int		validator(int argc, char **argv);
 t_data	*init(int num_p, int argc, char **argv);
 
 /*Mutexes*/
 void	destroy_mutexes(t_data *data, pthread_mutex_t *forks);
 void	init_mutexes(t_data *data);
+t_data	*allocate_mut(t_data *data, int num_p);
 
 /*Routines*/
 int		eating(t_philo *philo);
@@ -80,6 +80,7 @@ int		check_death(t_philo *philo);
 int		check_max_meals(t_philo	*philo);
 int		check_all_max_meals(t_data *data);
 int		check_condition(t_philo *philo);
+int		validator(int argc, char **argv);
 
 /*Aux*/
 int		ft_atoi(const char *nptr);

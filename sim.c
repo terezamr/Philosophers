@@ -6,7 +6,7 @@
 /*   By: mvicente <mvicente@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/29 15:38:24 by mvicente          #+#    #+#             */
-/*   Updated: 2023/06/22 11:59:41 by mvicente         ###   ########.fr       */
+/*   Updated: 2023/06/22 14:26:39 by mvicente         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,34 +60,8 @@ t_data	*init_philos(t_data *data, int num_p)
 	return (data);
 }
 
-int	validator(int argc, char **argv)
+t_data	*init_values(t_data *data, int argc, char **argv, int num_p)
 {
-	int	meals;
-
-	if (argc != 5 && argc != 6)
-		return (-2);
-	if (check_numbers(argv) == EXIT_FAILURE)
-		return (-2);
-	if (argc == 6)
-	{
-		meals = ft_atoi(argv[5]);
-		if (meals <= 0)
-			return (-2);
-	}
-	else
-		meals = -1;
-	return (meals);
-}
-
-t_data	*init(int num_p, int argc, char **argv)
-{
-	t_data			*data;
-
-	if (validator(argc, argv) == -2)
-		return (NULL);
-	data = malloc(sizeof(t_data));
-	if (!data)
-		return (NULL);
 	data->start_time = get_time();
 	data->num_philo = num_p;
 	data->time_to_die = ft_atoi(argv[2]);
@@ -99,12 +73,26 @@ t_data	*init(int num_p, int argc, char **argv)
 	data->fk = malloc(sizeof(int) * num_p);
 	if (!data->fk)
 		return (NULL);
-	data = init_philos(data, num_p);
-	data->forks = malloc(sizeof(pthread_mutex_t) * num_p);
-	if (!data->forks || !data)
+	return (data);
+}
+
+t_data	*init(int num_p, int argc, char **argv)
+{
+	t_data			*data;
+
+	if (validator(argc, argv) == -2)
 		return (NULL);
-	data->searching = malloc(sizeof(pthread_mutex_t) * num_p);
-	if (!data->searching)
+	data = malloc(sizeof(t_data));
+	if (!data)
+		return (NULL);
+	data = init_values(data, argc, argv, num_p);
+	if (!data)
+		return (NULL);
+	data = init_philos(data, num_p);
+	if (!data)
+		return (NULL);
+	data = allocate_mut(data, num_p);
+	if (!data)
 		return (NULL);
 	init_mutexes(data);
 	return (data);

@@ -6,7 +6,7 @@
 /*   By: mvicente <mvicente@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/29 15:38:24 by mvicente          #+#    #+#             */
-/*   Updated: 2023/06/22 11:59:49 by mvicente         ###   ########.fr       */
+/*   Updated: 2023/06/22 14:24:30 by mvicente         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,4 +46,15 @@ void	init_mutexes(t_data *data)
 	}
 	pthread_mutex_init(&data->life, NULL);
 	pthread_mutex_init(&data->printing, NULL);
+}
+
+t_data	*allocate_mut(t_data *data, int num_p)
+{
+	data->forks = malloc(sizeof(pthread_mutex_t) * num_p);
+	if (!data->forks || !data)
+		return (NULL);
+	data->searching = malloc(sizeof(pthread_mutex_t) * num_p);
+	if (!data->searching)
+		return (NULL);
+	return (data);
 }
