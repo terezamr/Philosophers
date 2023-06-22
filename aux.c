@@ -6,7 +6,7 @@
 /*   By: mvicente <mvicente@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/29 15:38:24 by mvicente          #+#    #+#             */
-/*   Updated: 2023/06/21 08:56:45 by mvicente         ###   ########.fr       */
+/*   Updated: 2023/06/22 14:14:17 by mvicente         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,6 +52,8 @@ void	free_data(t_data *data, int num)
 		free(data->philos);
 	if (data->forks)
 		free(data->forks);
+	if (data->searching)
+		free(data->searching);
 	if (data->fk)
 		free(data->fk);
 	if (data)

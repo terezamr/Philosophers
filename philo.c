@@ -6,20 +6,30 @@
 /*   By: mvicente <mvicente@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/29 15:38:24 by mvicente          #+#    #+#             */
-/*   Updated: 2023/06/21 11:07:03 by mvicente         ###   ########.fr       */
+/*   Updated: 2023/06/22 14:05:49 by mvicente         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
 
+void	philo_one(t_philo *philo)
+{
+	print_status(philo, FORK);
+	sleep_time(philo->data->time_to_die);
+}
+
 void	*philo(void *philo)
 {
 	void	*a;
 	t_philo	*philo_cp;
-	int		value;
 
 	a = NULL;
 	philo_cp = (t_philo *)philo;
+	if (philo_cp->data->num_philo == 1)
+	{
+		philo_one(philo);
+		return (a);
+	}
 	if (philo_cp->id % 2 != 0)
 	{
 		thinking(philo_cp);
@@ -27,10 +37,9 @@ void	*philo(void *philo)
 	}
 	while (1)
 	{
-		value = eating(philo_cp);
-		if (value == 1)
+		if (check_condition(philo) == 1)
 			return (NULL);
-		else if (value == -2)
+		if (eating(philo_cp) == 1)
 			continue ;
 		if (sleeping(philo_cp) == 1)
 			return (NULL);

@@ -6,7 +6,7 @@
 /*   By: mvicente <mvicente@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/29 15:38:24 by mvicente          #+#    #+#             */
-/*   Updated: 2023/06/20 12:36:08 by mvicente         ###   ########.fr       */
+/*   Updated: 2023/06/22 11:59:41 by mvicente         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -102,6 +102,9 @@ t_data	*init(int num_p, int argc, char **argv)
 	data = init_philos(data, num_p);
 	data->forks = malloc(sizeof(pthread_mutex_t) * num_p);
 	if (!data->forks || !data)
+		return (NULL);
+	data->searching = malloc(sizeof(pthread_mutex_t) * num_p);
+	if (!data->searching)
 		return (NULL);
 	init_mutexes(data);
 	return (data);
