@@ -36,3 +36,12 @@ void	sleep_time(int time_to_sleep)
 	while (get_time() < stop)
 		usleep(100);
 }
+
+void	meal_time(t_philo *philo)
+{
+	pthread_mutex_lock(&philo->meal);
+	print_status(philo, EATING);
+	philo->last_meal = get_time();
+	pthread_mutex_unlock(&philo->meal);
+	sleep_time(philo->data->time_to_eat);
+}

@@ -25,7 +25,7 @@ OBJ = $(SRC:.c=.o)
 all:	$(NAME)	
 
 $(NAME):	$(OBJ)
-			$(CC) -lpthread -g $(CFLAGS) $(OBJ) -o $(NAME)
+			$(CC) -pthread -g $(CFLAGS) $(OBJ) -o $(NAME) -fsanitize=thread
 
 clean:
 			$(RM) $(OBJ)

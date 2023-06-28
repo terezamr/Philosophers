@@ -76,7 +76,7 @@ t_data	*init_values(t_data *data, int argc, char **argv, int num_p)
 	return (data);
 }
 
-t_data	*init(int num_p, int argc, char **argv)
+t_data	*init(int argc, char **argv)
 {
 	t_data			*data;
 
@@ -85,13 +85,13 @@ t_data	*init(int num_p, int argc, char **argv)
 	data = malloc(sizeof(t_data));
 	if (!data)
 		return (NULL);
-	data = init_values(data, argc, argv, num_p);
+	data = init_values(data, argc, argv, ft_atoi(argv[1]));
 	if (!data)
 		return (NULL);
-	data = init_philos(data, num_p);
+	data = init_philos(data, ft_atoi(argv[1]));
 	if (!data)
 		return (NULL);
-	data = allocate_mut(data, num_p);
+	data = allocate_mut(data, ft_atoi(argv[1]));
 	if (!data)
 		return (NULL);
 	init_mutexes(data);

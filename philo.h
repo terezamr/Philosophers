@@ -59,7 +59,7 @@ typedef struct s_data
 /*Simulation*/
 void	destroy_sim(t_data	*dt, pthread_t *t, pthread_mutex_t *fk);
 int		exit_sim(pthread_t *t, pthread_t p, t_data *data);
-t_data	*init(int num_p, int argc, char **argv);
+t_data	*init(int argc, char **argv);
 
 /*Mutexes*/
 void	destroy_mutexes(t_data *data, pthread_mutex_t *forks);
@@ -74,6 +74,7 @@ int		thinking(t_philo *philo);
 /*Time*/
 time_t	get_time(void);
 void	sleep_time(int time_to_sleep);
+void	meal_time(t_philo *philo);
 
 /*Conditions*/
 int		check_death(t_philo *philo);

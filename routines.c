@@ -57,11 +57,7 @@ int	eating(t_philo *philo)
 		free(forks);
 		return (1);
 	}
-	pthread_mutex_lock(&philo->meal);
-	print_status(philo, EATING);
-	philo->last_meal = get_time();
-	pthread_mutex_unlock(&philo->meal);
-	sleep_time(philo->data->time_to_eat);
+	meal_time(philo);
 	if (philo->data->max_meals != -1)
 	{
 		pthread_mutex_lock(&philo->number);

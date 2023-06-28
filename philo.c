@@ -76,7 +76,7 @@ int	main(int argc, char **argv)
 	t_data			*data;
 
 	i = 0;
-	data = init(ft_atoi(argv[1]), argc, argv);
+	data = init(argc, argv);
 	if (!data)
 		return (EXIT_FAILURE);
 	t = malloc(sizeof(pthread_t) * ft_atoi(argv[1]));
