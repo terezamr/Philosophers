@@ -18,14 +18,14 @@ CFLAGS = -Wall -Wextra -Werror
 
 RM = rm -f
 
-SRC = philo.c sim.c mutexes.c routines.c time.c conditions.c aux.c
+SRC = philo.c sim.c mutexes.c routines.c time.c conditions.c forks.c aux.c 
 
 OBJ = $(SRC:.c=.o)
 
 all:	$(NAME)	
 
 $(NAME):	$(OBJ)
-			$(CC) -pthread -g $(CFLAGS) $(OBJ) -o $(NAME) -fsanitize=thread
+			$(CC) -pthread -g $(CFLAGS) $(OBJ) -o $(NAME)
 
 clean:
 			$(RM) $(OBJ)

@@ -12,6 +12,18 @@
 
 #include "philo.h"
 
+int	check_condition(t_philo *philo)
+{
+	pthread_mutex_lock(&philo->data->life);
+	if (philo->data->dead == 1 || philo->data->full == 1)
+	{
+		pthread_mutex_unlock(&philo->data->life);
+		return (1);
+	}
+	pthread_mutex_unlock(&philo->data->life);
+	return (0);
+}
+
 void	*routines_loop(t_philo *philo)
 {
 	while (1)
@@ -39,10 +51,7 @@ void	*philo(void *philo)
 		return (NULL);
 	}
 	if (philo_cp->id % 2 != 0)
-	{
-		thinking(philo_cp);
 		sleep_time(30);
-	}
 	return (routines_loop(philo_cp));
 }
 

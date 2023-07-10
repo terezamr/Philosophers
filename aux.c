@@ -90,16 +90,21 @@ void	print_status(t_philo *philo, int action)
 {
 	time_t	time;
 
-	pthread_mutex_lock(&philo->data->printing);
 	time = get_time() - philo->data->start_time;
+	pthread_mutex_lock(&philo->data->printing);
+	if (action == 4)
+		printf("%ld %d died\n", time, philo->id);
+	if (check_d(philo) == 1)
+	{
+		pthread_mutex_unlock(&philo->data->printing);
+		return ;
+	}
 	if (action == 1)
 		printf("%ld %d is eating\n", time, philo->id);
 	else if (action == 2)
 		printf("%ld %d is sleeping\n", time, philo->id);
 	else if (action == 3)
 		printf("%ld %d is thinking\n", time, philo->id);
-	else if (action == 4)
-		printf("%ld %d died\n", time, philo->id);
 	else if (action == 5)
 		printf("%ld %d has taken a fork\n", time, philo->id);
 	pthread_mutex_unlock(&philo->data->printing);

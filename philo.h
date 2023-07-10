@@ -80,8 +80,12 @@ void	meal_time(t_philo *philo);
 int		check_death(t_philo *philo);
 int		check_max_meals(t_philo	*philo);
 int		check_all_max_meals(t_data *data);
-int		check_condition(t_philo *philo);
 int		validator(int argc, char **argv);
+int		check_d(t_philo *philo);
+
+/*Forks*/
+void	unlock_fork(t_philo *philo, int *forks);
+int		locking_forks(t_philo *philo, int *forks);
 
 /*Aux*/
 int		ft_atoi(const char *nptr);
@@ -89,5 +93,8 @@ void	free_data(t_data *data, int num);
 int		*get_index_f(t_philo *philo);
 void	print_status(t_philo *philo, int action);
 int		check_numbers(char **argv);
+
+/*Philo*/
+int		check_condition(t_philo *philo);
 
 #endif

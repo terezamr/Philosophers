@@ -65,10 +65,10 @@ int	check_all_max_meals(t_data *data)
 	return (1);
 }
 
-int	check_condition(t_philo *philo)
+int	check_d(t_philo *philo)
 {
 	pthread_mutex_lock(&philo->data->life);
-	if (philo->data->dead == 1 || philo->data->full == 1)
+	if (philo->data->dead == 1)
 	{
 		pthread_mutex_unlock(&philo->data->life);
 		return (1);
