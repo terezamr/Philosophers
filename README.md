@@ -18,9 +18,9 @@ N philosophers are sitting at a round table and eating. A fork is placed between
 | `time_die`           | time that a philo can spend withou eating |
 | `time_eat`           | time of a meal  |
 | `time_sleep`           | time of a nap |
-| `nb_meals`           | number of times every philo has to eat so that the simulation stops |
+| `nb_meals`           | number of times every philo has to eat to stop the simulation |
 
-If nb_meals is not specified, the simuation stops when a philo dies.
+If nb_meals is not specified, the simuation stops when a philo dies. If a philo spends more than _time_eat_ without eating, he dies.
 
 ### Rules
 
