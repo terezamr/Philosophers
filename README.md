@@ -29,7 +29,11 @@ If nb_meals is not specified, the simuation stops when a philo dies.
 - Eating takes two forks (left and right fork of each philo)
 - When the meal ends, the philo puts both forks in the table and starts sleeping
 - Philos need to eat and should never starve
-- 
+- Philo number N sits between philos N-1 and N+1 (except for the first and last, that sit side by side)
+- State changes of every philo should be display as followed: `<timestamp> N <action>`
+- NO DATA RACES
+
+Also, each philo should be a thread. To prevent philos from duplicating forks, the forks state should be protected with a mutex for each of them.
 
 ### References
 - https://github.com/nafuka11/philosophers-visualizer
